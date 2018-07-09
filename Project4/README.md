@@ -37,6 +37,7 @@ an estimate of position, velocity, and yaw angle.
 <a href="https://imgflip.com/gif/2dnggg"><img src="https://i.imgflip.com/2dnggg.gif" title="made at imgflip.com"/></a>
 
 Prediction Covariance.
+
 <a href="https://imgflip.com/gif/2dngi6"><img src="https://i.imgflip.com/2dngi6.gif" title="made at imgflip.com"/></a>
 
 #### Step 4: Magnetometer Update
