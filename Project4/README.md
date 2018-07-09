@@ -34,17 +34,18 @@ an estimate of position, velocity, and yaw angle.
 
 #### Step 3: Prediction Step
 
-![Prediction_Covariance](./doc/img/prediction_covariance.png)
+<a href="https://imgflip.com/gif/2dnggg"><img src="https://i.imgflip.com/2dnggg.gif" title="made at imgflip.com"/></a>
+
+Prediction Covariance.
+<a href="https://imgflip.com/gif/2dngi6"><img src="https://i.imgflip.com/2dngi6.gif" title="made at imgflip.com"/></a>
 
 #### Step 4: Magnetometer Update
 
-![Step 4](./doc/gif/step_4.gif)
-
-[Magnetometer_Update](./doc/img/magnetometer_update.png)
+<a href="https://imgflip.com/gif/2dngol"><img src="https://i.imgflip.com/2dngol.gif" title="made at imgflip.com"/></a>
 
 #### Step 5: Closed Loop + GPS Update
 
-![Step 5](./doc/gif/step_5.gif)
+<a href="https://imgflip.com/gif/2dngr9"><img src="https://i.imgflip.com/2dngr9.gif" title="made at imgflip.com"/></a>
 
 #### Step 6: Adding Your Controller
 
