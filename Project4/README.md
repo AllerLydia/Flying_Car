@@ -1,7 +1,6 @@
 
 # Project: Estimation
 
-![Many Quad](./doc/gif/many_quad.gif)
 
 ## Project description
 
