@@ -25,10 +25,7 @@ You may find it helpful to consult the [Python controller code](https://github.c
 3. **Parameter Ratios**: In this [one-page document](https://www.overleaf.com/read/bgrkghpggnyc#/61023787/) you can find a derivation of the ratio of velocity proportional gain to position proportional gain for a critically damped double integrator system. The ratio of `kpV / kpP` should be 4.
 
 ### Body rate and roll/pitch control (scenario 2) ###
-First, you will implement the body rate and roll / pitch control.  For the simulation, you will use `Scenario 2`.  In this scenario, you will see a quad above the origin.  It is created with a small initial rotation speed about its roll axis.  Your controller will need to stabilize the rotational motion and bring the vehicle back to level attitude.
-
-To accomplish this, you will:
-
+After implementation, scenario 2 performances like this:
 
 
 <p align="center">
@@ -38,38 +35,17 @@ To accomplish this, you will:
 
 ### Position/velocity and yaw angle control (scenario 3) ###
 
-Next, you will implement the position, altitude and yaw control for your quad.  For the simulation, you will use `Scenario 3`.  This will create 2 identical quads, one offset from its target point (but initialized with yaw = 0) and second offset from target point but yaw = 45 degrees.
+The quads are going to their destination points and tracking error is going down.
 
- - implement the code in the function `LateralPositionControl()`
- - implement the code in the function `AltitudeControl()`
- - tune parameters `kpPosZ` and `kpPosZ`
- - tune parameters `kpVelXY` and `kpVelZ`
-
-If successful, the quads should be going to their destination points and tracking error should be going down (as shown below). However, one quad remains rotated in yaw.
-
- - implement the code in the function `YawControl()`
- - tune parameters `kpYaw` and the 3rd (z) component of `kpPQR`
-
-Tune position control for settling time. Don’t try to tune yaw control too tightly, as yaw control requires a lot of control authority from a quadcopter and can really affect other degrees of freedom.  This is why you often see quadcopters with tilted motors, better yaw authority!
 
 <p align="center">
 <img src="gif/scenario3.gif" width="500"/>
 </p>
 
-**Hint:**  For a second order system, such as the one for this quadcopter, the velocity gain (`kpVelXY` and `kpVelZ`) should be at least ~3-4 times greater than the respective position gain (`kpPosXY` and `kpPosZ`).
 
 ### Non-idealities and robustness (scenario 4) ###
 
-In this part, we will explore some of the non-idealities and robustness of a controller.  For this simulation, we will use `Scenario 4`.  This is a configuration with 3 quads that are all are trying to move one meter forward.  However, this time, these quads are all a bit different:
- - The green quad has its center of mass shifted back
- - The orange vehicle is an ideal quad
- - The red vehicle is heavier than usual
-
-1. Run your controller & parameter set from Step 3.  Do all the quads seem to be moving OK?  If not, try to tweak the controller parameters to work for all 3 (tip: relax the controller).
-
-2. Edit `AltitudeControl()` to add basic integral control to help with the different-mass vehicle.
-
-3. Tune the integral control, and other control parameters until all the quads successfully move properly.  Your drones' motion should look like this:
+All the quads successfully move properly. 
 
 <p align="center">
 <img src="gif/scenario4.gif" width="500"/>
@@ -87,36 +63,16 @@ How well is your drone able to follow the trajectory?  It is able to hold to the
 
 ### Extra Challenge 1 (Optional) ###
 
-You will notice that initially these two trajectories are the same. Let's work on improving some performance of the trajectory itself.
-
 1. Inspect the python script `traj/MakePeriodicTrajectory.py`.  Can you figure out a way to generate a trajectory that has velocity (not just position) information?
 
 2. Generate a new `FigureEightFF.txt` that has velocity terms
 Did the velocity-specified trajectory make a difference? Why?
 
-With the two different trajectories, your drones' motions should look like this:
+With the two different trajectories, drones' motions:
 
 <p align="center">
 <img src="gif/scenario5.gif" width="500"/>
 </p>
-
-
-### Extra Challenge 2 (Optional) ###
-
-For flying a trajectory, is there a way to provide even more information for even better tracking?
-
-How about trying to fly this trajectory as quickly as possible (but within following threshold)!
-
-
-## Evaluation ##
-
-To assist with tuning of your controller, the simulator contains real time performance evaluation.  We have defined a set of performance metrics for each of the scenarios that your controllers must meet for a successful submission.
-
-There are two ways to view the output of the evaluation:
-
- - in the command line, at the end of each simulation loop, a **PASS** or a **FAIL** for each metric being evaluated in that simulation
- - on the plots, once your quad meets the metrics, you will see a green box appear on the plot notifying you of a **PASS**
-
 
 ### Performance Metrics ###
 
@@ -152,116 +108,33 @@ You're reading it! Below I describe how I addressed each rubric point and where 
 
 ### Implemented body rate control in C++.
 
-This part is implemented in [QuadControl::BodyRateControl](./cpp/src/QuadControl.cpp#L104-L105):
+This part is implemented in QuadControl.cpp, Line 106 and onwards.
 
-```cpp
-V3F rateErr = pqrCmd - pqr;
-momentCmd = V3F(Ixx,Iyy,Izz) * kpPQR * rateErr;
-```
 ### Implement roll pitch control in C++.
 
-This part is implemented in [QuadControl::RollPitchControl](./cpp/src/QuadControl.cpp#L134-L147):
+This part is implemented in QuadControl.cpp, line 138 and onward.
 
-```cpp
-float targetBX = 0.0;
-float targetBY = 0.0;
-if (collThrustCmd > 0.0)
-{
-  float c = collThrustCmd/mass;
-  targetBX = -CONSTRAIN(accelCmd.x/c, -maxTiltAngle, maxTiltAngle);
-  targetBY = -CONSTRAIN(accelCmd.y/c, -maxTiltAngle, maxTiltAngle);
-}
-float bX = targetBX - R(0, 2);
-float bY = targetBY - R(1, 2);
-
-pqrCmd.x = kpBank *((R(1, 0) * bX) - (R(0, 0) * bY)) / R(2, 2);
-pqrCmd.y = kpBank *((R(1, 1) * bX) - (R(0, 1) * bY)) / R(2, 2);
-pqrCmd.z = 0.f;
-```
 
 ### Implement altitude controller in C++.
 
-This part is implemented in [QuadControl::AltitudeControl](./cpp/src/QuadControl.cpp#L177-L183):
-
-```cpp
-float zErr = posZCmd - posZ;
-integratedAltitudeError += zErr * dt;
-
-float velZRef = velZCmd + (kpPosZ * zErr) + (KiPosZ * integratedAltitudeError);
-velZRef = -CONSTRAIN(-velZRef, -maxDescentRate, maxAscentRate);
-float accelCmd = accelZCmd + (kpVelZ*(velZRef - velZ));
-thrust = mass * (9.81f - (accelCmd / R(2,2)));
-```
+This part is implemented in QuadControl.cpp, line 181 and onward.
 
 ### Implement lateral position control in C++.
 
-This part is implemented in [QuadControl::LateralPositionControl](./cpp/src/QuadControl.cpp#L219-L224):
+This part is implemented in QuadControl.cpp, line 224 and onward.
 
-```cpp
-velCmd.constrain(-maxSpeedXY,maxSpeedXY);
-V3F posErr = posCmd - pos;
-V3F velErr = velCmd - vel;
-accelCmd = accelCmdFF + (kpPosXY * posErr) + (kpVelXY * velErr); //z compent is zero, so let's ignore use kpPosXY/kpVelXY for pos.z/vel.z as well
-accelCmd.constrain(-maxAccelXY,maxAccelXY);
-accelCmd.z = 0;
-```
 
 ### Implement yaw control in C++.
 
-This part is implemented in [QuadControl::YawControl](./cpp/src/QuadControl.cpp#L245-L256):
-
-```cpp
-yawCmd = fmod(yawCmd, (2.0f*F_PI));
-
-if (yawCmd <= -F_PI)
-{
- yawCmd += (2.0f*F_PI);
-}
-else if (yawCmd > F_PI)
-{
- yawCmd -= (2.0f*F_PI);
-}
-
-yawRateCmd = kpYaw * (yawCmd - yaw);
-```
+This part is implemented in QuadControl.cpp, line 251 and onward. 
 
 ### Implement calculating the motor commands given commanded thrust and moments in C++.
 
-This part is implemented in [QuadControl::GenerateMotorCommands](./cpp/src/QuadControl.cpp#L72-L81):
+This part is implemented in uadControl.cpp, line 72 and onward. 
 
-```cpp
-float l = L / sqrtf(2.f);
-float cBar = collThrustCmd / 4.f;
-float pBar = momentCmd.x / (l * 4.f);
-float qBar = momentCmd.y / (l * 4.f);
-float rBar = momentCmd.z / (kappa * 4.f);
-
-cmd.desiredThrustsN[0] = cBar + pBar + qBar + rBar; // front left
-cmd.desiredThrustsN[1] = cBar - pBar + qBar - rBar; // front right
-cmd.desiredThrustsN[2] = cBar + pBar - qBar - rBar; // rear left
-cmd.desiredThrustsN[3] = cBar - pBar - qBar + rBar; // rear right
-```
 
 ## Flight Evaluation
 
 ### Your C++ controller is successfully able to fly the provided test trajectory and visually passes inspection of the scenarios leading up to the test trajectory.
 
-The results are displayed above and can be found in ![./doc/gif](./doc/gif/) folder. The implementation passes scenarios 1 to 5:
-
-```
-# Scenario 1
-PASS: ABS(Quad.PosFollowErr) was less than 0.500000 for at least 0.800000 seconds
-# Scenario 2
-PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
-PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
-# Scenario 3
-PASS: ABS(Quad1.Pos.X) was less than 0.100000 for at least 1.250000 seconds
-PASS: ABS(Quad2.Pos.X) was less than 0.100000 for at least 1.250000 seconds
-PASS: ABS(Quad2.Yaw) was less than 0.100000 for at least 1.000000 seconds
-# Scenario 4
-PASS: ABS(Quad1.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
-PASS: ABS(Quad2.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
-PASS: ABS(Quad3.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
-# Scenario 5
-PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 seconds
-```
+The results are gif above, all criterials are met. 
