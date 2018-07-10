@@ -48,7 +48,7 @@ We won't be worrying about yaw just yet.
 If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position!  You should also see the vehicle angle (Roll) get controlled to 0.
 
 <p align="center">
-<img src="animations/scenario2.gif" width="500"/>
+<img src="gif/scenario2.gif" width="500"/>
 </p>
 
 
