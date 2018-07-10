@@ -29,23 +29,7 @@ First, you will implement the body rate and roll / pitch control.  For the simul
 
 To accomplish this, you will:
 
-1. Implement body rate control
 
- - implement the code in the function `GenerateMotorCommands()`
- - implement the code in the function `BodyRateControl()`
- - Tune `kpPQR` in `QuadControlParams.txt` to get the vehicle to stop spinning quickly but not overshoot
-
-If successful, you should see the rotation of the vehicle about roll (omega.x) get controlled to 0 while other rates remain zero.  Note that the vehicle will keep flying off quite quickly, since the angle is not yet being controlled back to 0.  Also note that some overshoot will happen due to motor dynamics!.
-
-If you come back to this step after the next step, you can try tuning just the body rate omega (without the outside angle controller) by setting `QuadControlParams.kpBank = 0`.
-
-2. Implement roll / pitch control
-We won't be worrying about yaw just yet.
-
- - implement the code in the function `RollPitchControl()`
- - Tune `kpBank` in `QuadControlParams.txt` to minimize settling time but avoid too much overshoot
-
-If successful you should now see the quad level itself (as shown below), though it’ll still be flying away slowly since we’re not controlling velocity/position!  You should also see the vehicle angle (Roll) get controlled to 0.
 
 <p align="center">
 <img src="gif/scenario2.gif" width="500"/>
@@ -69,7 +53,7 @@ If successful, the quads should be going to their destination points and trackin
 Tune position control for settling time. Don’t try to tune yaw control too tightly, as yaw control requires a lot of control authority from a quadcopter and can really affect other degrees of freedom.  This is why you often see quadcopters with tilted motors, better yaw authority!
 
 <p align="center">
-<img src="animations/scenario3.gif" width="500"/>
+<img src="gif/scenario3.gif" width="500"/>
 </p>
 
 **Hint:**  For a second order system, such as the one for this quadcopter, the velocity gain (`kpVelXY` and `kpVelZ`) should be at least ~3-4 times greater than the respective position gain (`kpPosXY` and `kpPosZ`).
@@ -88,7 +72,7 @@ In this part, we will explore some of the non-idealities and robustness of a con
 3. Tune the integral control, and other control parameters until all the quads successfully move properly.  Your drones' motion should look like this:
 
 <p align="center">
-<img src="animations/scenario4.gif" width="500"/>
+<img src="gif/scenario4.gif" width="500"/>
 </p>
 
 
@@ -113,7 +97,7 @@ Did the velocity-specified trajectory make a difference? Why?
 With the two different trajectories, your drones' motions should look like this:
 
 <p align="center">
-<img src="animations/scenario5.gif" width="500"/>
+<img src="gif/scenario5.gif" width="500"/>
 </p>
 
 
