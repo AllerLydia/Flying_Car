@@ -26,30 +26,40 @@ an estimate of position, velocity, and yaw angle.
 
 #### Step 1: Sensor Noise
 
-<a href="https://imgflip.com/gif/2dnfmr"><img src="https://i.imgflip.com/2dnfmr.gif" title="made at imgflip.com"/></a>
+<p align="center">
+<img src="gif/project4_1.gif" width="500"/>
+</p>
 
 #### Step 2: Attitude Estimation
 
-<a href="https://imgflip.com/gif/2dnfq5"><img src="https://i.imgflip.com/2dnfq5.gif" title="made at imgflip.com"/></a>
+<p align="center">
+<img src="gif/project4_2.gif" width="500"/>
+</p>
 
 #### Step 3: Prediction Step
 
-<a href="https://imgflip.com/gif/2dnggg"><img src="https://i.imgflip.com/2dnggg.gif" title="made at imgflip.com"/></a>
-
+<p align="center">
+<img src="gif/project4_3.gif" width="500"/>
+</p>
 Prediction Covariance.
 
-<a href="https://imgflip.com/gif/2dngi6"><img src="https://i.imgflip.com/2dngi6.gif" title="made at imgflip.com"/></a>
-
+<p align="center">
+<img src="gif/project4_4.gif" width="500"/>
+</p>
 #### Step 4: Magnetometer Update
 
-<a href="https://imgflip.com/gif/2dngol"><img src="https://i.imgflip.com/2dngol.gif" title="made at imgflip.com"/></a>
-
+<p align="center">
+<img src="gif/project4_5.gif" width="500"/>
+</p>
 #### Step 5: Closed Loop + GPS Update
 
-<a href="https://imgflip.com/gif/2dngr9"><img src="https://i.imgflip.com/2dngr9.gif" title="made at imgflip.com"/></a>
+<p align="center">
+<img src="gif/project4_6.gif" width="500"/>
+</p>
 
 #### Step 6: Adding Your Controller
 
-<a href="https://imgflip.com/gif/2dnf2x"><img src="https://i.imgflip.com/2dnf2x.gif" title="made at imgflip.com"/></a>
-
+<p align="center">
+<img src="gif/project4_7.gif" width="500"/>
+</p>
 
