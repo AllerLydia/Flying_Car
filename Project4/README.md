@@ -24,19 +24,25 @@ an estimate of position, velocity, and yaw angle.
 
 ## Tasks results
 
-#### Step 1: Sensor Noise
+### Step 1: Sensor Noise
+
+
 
 <p align="center">
 <img src="gif/project4_1.gif" width="500"/>
 </p>
 
-#### Step 2: Attitude Estimation
+### Step 2: Attitude Estimation
+
+
 
 <p align="center">
 <img src="gif/project4_2.gif" width="500"/>
 </p>
 
-#### Step 3: Prediction Step
+### Step 3: Prediction Step
+
+
 
 <p align="center">
 <img src="gif/project4_3.gif" width="500"/>
@@ -46,18 +52,24 @@ Prediction Covariance.
 <p align="center">
 <img src="gif/project4_4.gif" width="500"/>
 </p>
-#### Step 4: Magnetometer Update
+### Step 4: Magnetometer Update
+
+
 
 <p align="center">
 <img src="gif/project4_5.gif" width="500"/>
 </p>
-#### Step 5: Closed Loop + GPS Update
+### Step 5: Closed Loop + GPS Update
+
+
 
 <p align="center">
 <img src="gif/project4_6.gif" width="500"/>
 </p>
 
-#### Step 6: Adding Your Controller
+### Step 6: Adding Your Controller
+
+
 
 <p align="center">
 <img src="gif/project4_7.gif" width="500"/>
