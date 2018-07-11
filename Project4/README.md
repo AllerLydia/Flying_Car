@@ -52,6 +52,7 @@ Prediction Covariance.
 <p align="center">
 <img src="gif/project4_4.gif" width="500"/>
 </p>
+
 ### Step 4: Magnetometer Update
 
 
@@ -59,6 +60,7 @@ Prediction Covariance.
 <p align="center">
 <img src="gif/project4_5.gif" width="500"/>
 </p>
+
 ### Step 5: Closed Loop + GPS Update
 
 
