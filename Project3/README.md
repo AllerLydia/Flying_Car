@@ -109,29 +109,75 @@ You're reading it! Below I describe how I addressed each rubric point and where 
 ### Implemented body rate control in C++.
 
 This part is implemented in QuadControl.cpp, Line 106 and onwards.
+The body rate control takes three input commands, then returns moment command, updated by three parameters, error rate and gain parameter.
 
 ### Implement roll pitch control in C++.
 
 This part is implemented in QuadControl.cpp, line 138 and onward.
 
+    float target_bx = 0.0;
+    float target_by = 0.0;
+    if (collThrustCmd > 0.0){
+        float c = collThrustCmd/mass;
+        target_bx = -CONSTRAIN(accelCmd.x/c, -maxTiltAngle, maxTiltAngle);
+        target_by = -CONSTRAIN(accelCmd.y/c, -maxTiltAngle, maxTiltAngle);
+    }
+    float bx = target_bx - R(0, 2);
+    float by = target_by - R(1, 2);
+    
+    pqrCmd.x = kpBank * ((R(1,0) * bx) - (R(0, 0) * by)) / R(2,2);
+    pqrCmd.y = kpBank * ((R(1,1) * bx) - (R(0, 1) * by)) / R(2,2);
 
 ### Implement altitude controller in C++.
 
 This part is implemented in QuadControl.cpp, line 181 and onward.
 
+    float z_err = posZCmd - posZ;
+    integratedAltitudeError += z_err * dt;
+    
+    float vel_z = velZCmd + (kpPosZ * z_err) + (KiPosZ * integratedAltitudeError);
+    vel_z = -CONSTRAIN(-vel_z, -maxDescentRate, maxAscentRate);
+    float accelCmd = accelZCmd + (kpVelZ * (vel_z - velZ));
+    thrust = mass * (9.81f - (accelCmd / R(2, 2)));
+
 ### Implement lateral position control in C++.
 
 This part is implemented in QuadControl.cpp, line 224 and onward.
 
-
+    velCmd.constrain(-maxSpeedXY, maxSpeedXY);
+    V3F pos_err = posCmd - pos;
+    V3F vel_err = velCmd - vel;
+    accelCmd = accelCmdFF + (kpPosXY * pos_err) + (kpVelXY * vel_err);
+    accelCmd.constrain(-maxAccelXY, maxAccelXY);
+    accelCmd.z = 0;
+    
 ### Implement yaw control in C++.
 
 This part is implemented in QuadControl.cpp, line 251 and onward. 
+
+    yawCmd = fmod(yawCmd, (2.0f * F_PI));
+    if(yawCmd <= - F_PI){
+        yawCmd += (2.0f * F_PI);
+    }
+    else if (yawCmd > F_PI){
+        yawCmd -= (2.0f * F_PI);
+    }
 
 ### Implement calculating the motor commands given commanded thrust and moments in C++.
 
 This part is implemented in uadControl.cpp, line 72 and onward. 
 
+    float l = L/sqrtf(2.f);
+    float c_bar = collThrustCmd/4.f;
+    float p_bar = momentCmd.x / (l * 4.f);
+    float q_bar = momentCmd.y / (l * 4.f);
+    float r_bar = momentCmd.z / (kappa * 4.f);
+    
+    
+    cmd.desiredThrustsN[0] = c_bar + p_bar + q_bar + r_bar; // front left
+    cmd.desiredThrustsN[1] = c_bar - p_bar + q_bar - r_bar; // front right
+    cmd.desiredThrustsN[2] = c_bar + p_bar - q_bar - r_bar; // rear left
+    cmd.desiredThrustsN[3] = c_bar - p_bar - q_bar + r_bar;  // rear right
 
 ## Flight Evaluation
 
