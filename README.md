@@ -1,4 +1,6 @@
-# FCND-Term1-Starter-Kit
+# Flying Car Nonedegree
+
+The rest of content is from Udacity, FCND - Starter Kit.
 
 Starter kit for FCND Term 1. Python 3 is used for the entirety of term 1.
 
@@ -52,7 +54,7 @@ xcode-select --install
 
 **NOTE:** On Windows you may need to open a terminal/powershell as an administrator. This can be done by right-clicking the program and selecting "Run as Administrator".
 
-
+[![Udacity - Fly Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/flying-car-nanodegree--nd787)
 <p align="center">
 <img src="Flyingcar.png" width="1000"/>
 </p>
